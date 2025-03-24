@@ -131,7 +131,7 @@ func Count[T any](
 		order.OrderQuery(&db, prefix)
 	}
 
-	if err := db.Where(&entity).Count(&entityCount).Error; err != nil {
+	if err := db.Model(&entity).Where(&entity).Count(&entityCount).Error; err != nil {
 		return entityCount, err
 	}
 
