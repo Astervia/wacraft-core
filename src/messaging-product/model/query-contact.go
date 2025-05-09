@@ -1,7 +1,7 @@
 package messaging_product_model
 
 import (
-	common_model "github.com/Astervia/omni-core/src/common/model"
+	common_model "github.com/Astervia/wacraft-core/src/common/model"
 	"github.com/google/uuid"
 )
 

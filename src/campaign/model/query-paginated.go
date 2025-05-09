@@ -1,8 +1,8 @@
 package campaign_model
 
 import (
-	common_model "github.com/Astervia/omni-core/src/common/model"
-	database_model "github.com/Astervia/omni-core/src/database/model"
+	common_model "github.com/Astervia/wacraft-core/src/common/model"
+	database_model "github.com/Astervia/wacraft-core/src/database/model"
 	"github.com/google/uuid"
 )
 

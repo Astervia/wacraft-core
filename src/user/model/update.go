@@ -1,6 +1,6 @@
 package user_model
 
-import common_model "github.com/Astervia/omni-core/src/common/model"
+import common_model "github.com/Astervia/wacraft-core/src/common/model"
 
 type Update struct {
 	Name  string `json:"name,omitempty"`

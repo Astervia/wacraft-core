@@ -3,7 +3,7 @@ package messaging_product_model
 import (
 	"time"
 
-	database_model "github.com/Astervia/omni-core/src/database/model"
+	database_model "github.com/Astervia/wacraft-core/src/database/model"
 	"gorm.io/gorm"
 )
 

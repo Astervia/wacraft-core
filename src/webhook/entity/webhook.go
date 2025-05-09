@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	common_model "github.com/Astervia/omni-core/src/common/model"
-	webhook_model "github.com/Astervia/omni-core/src/webhook/model"
+	common_model "github.com/Astervia/wacraft-core/src/common/model"
+	webhook_model "github.com/Astervia/wacraft-core/src/webhook/model"
 )
 
 type Webhook struct {

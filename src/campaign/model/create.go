@@ -1,7 +1,7 @@
 package campaign_model
 
 import (
-	message_model "github.com/Astervia/omni-core/src/message/model"
+	message_model "github.com/Astervia/wacraft-core/src/message/model"
 	"github.com/google/uuid"
 )
 

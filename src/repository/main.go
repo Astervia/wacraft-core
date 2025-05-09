@@ -4,7 +4,7 @@ package repository
 import (
 	"errors"
 
-	database_model "github.com/Astervia/omni-core/src/database/model"
+	database_model "github.com/Astervia/wacraft-core/src/database/model"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )

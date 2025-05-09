@@ -1,7 +1,7 @@
 package contact_model
 
 import (
-	common_model "github.com/Astervia/omni-core/src/common/model"
+	common_model "github.com/Astervia/wacraft-core/src/common/model"
 )
 
 type CreateContact struct {

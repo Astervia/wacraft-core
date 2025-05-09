@@ -3,9 +3,9 @@ package messaging_product_entity
 import (
 	"time"
 
-	common_model "github.com/Astervia/omni-core/src/common/model"
-	contact_entity "github.com/Astervia/omni-core/src/contact/entity"
-	messaging_product_model "github.com/Astervia/omni-core/src/messaging-product/model"
+	common_model "github.com/Astervia/wacraft-core/src/common/model"
+	contact_entity "github.com/Astervia/wacraft-core/src/contact/entity"
+	messaging_product_model "github.com/Astervia/wacraft-core/src/messaging-product/model"
 	"github.com/google/uuid"
 )
 

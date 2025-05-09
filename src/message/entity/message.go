@@ -1,9 +1,9 @@
 package message_entity
 
 import (
-	message_model "github.com/Astervia/omni-core/src/message/model"
-	messaging_product_entity "github.com/Astervia/omni-core/src/messaging-product/entity"
-	status_model "github.com/Astervia/omni-core/src/status/model"
+	message_model "github.com/Astervia/wacraft-core/src/message/model"
+	messaging_product_entity "github.com/Astervia/wacraft-core/src/messaging-product/entity"
+	status_model "github.com/Astervia/wacraft-core/src/status/model"
 )
 
 type Message struct {

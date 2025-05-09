@@ -3,7 +3,7 @@ package websocket_model
 import (
 	"sync"
 
-	common_service "github.com/Astervia/omni-core/src/common/service"
+	common_service "github.com/Astervia/wacraft-core/src/common/service"
 	"github.com/google/uuid"
 )
 

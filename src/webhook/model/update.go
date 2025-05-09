@@ -1,7 +1,7 @@
 package webhook_model
 
 import (
-	common_model "github.com/Astervia/omni-core/src/common/model"
+	common_model "github.com/Astervia/wacraft-core/src/common/model"
 )
 
 // UpdateWebhook represents the model for updating an existing webhook

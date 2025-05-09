@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	websocket_model "github.com/Astervia/omni-core/src/websocket/model"
+	websocket_model "github.com/Astervia/wacraft-core/src/websocket/model"
 	"github.com/google/uuid"
 )
 

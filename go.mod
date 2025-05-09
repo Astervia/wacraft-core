@@ -1,4 +1,4 @@
-module github.com/Astervia/omni-core
+module github.com/Astervia/wacraft-core
 
 go 1.23.0
 

@@ -1,8 +1,8 @@
 package status_entity
 
 import (
-	message_entity "github.com/Astervia/omni-core/src/message/entity"
-	status_model "github.com/Astervia/omni-core/src/status/model"
+	message_entity "github.com/Astervia/wacraft-core/src/message/entity"
+	status_model "github.com/Astervia/wacraft-core/src/status/model"
 )
 
 type Status struct {

@@ -1,8 +1,8 @@
 package campaign_entity
 
 import (
-	common_model "github.com/Astervia/omni-core/src/common/model"
-	messaging_product_entity "github.com/Astervia/omni-core/src/messaging-product/entity"
+	common_model "github.com/Astervia/wacraft-core/src/common/model"
+	messaging_product_entity "github.com/Astervia/wacraft-core/src/messaging-product/entity"
 	"github.com/google/uuid"
 )
 

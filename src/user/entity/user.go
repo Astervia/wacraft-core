@@ -1,9 +1,9 @@
 package user_entity
 
 import (
-	common_model "github.com/Astervia/omni-core/src/common/model"
-	crypto_service "github.com/Astervia/omni-core/src/crypto/service"
-	user_model "github.com/Astervia/omni-core/src/user/model"
+	common_model "github.com/Astervia/wacraft-core/src/common/model"
+	crypto_service "github.com/Astervia/wacraft-core/src/crypto/service"
+	user_model "github.com/Astervia/wacraft-core/src/user/model"
 	"gorm.io/gorm"
 )
 
