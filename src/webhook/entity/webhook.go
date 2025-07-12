@@ -82,7 +82,7 @@ func (w *Webhook) ExecuteRequest(payload interface{}, client *http.Client) (Webh
 	}
 
 	// Initialize a variable to hold the parsed JSON response or null if it fails
-	var parsedResponse interface{}
+	var parsedResponse any
 	err = json.Unmarshal(responseData, &parsedResponse)
 	if err != nil {
 		// If the response is not valid JSON, set parsedResponse to nil (null)
