@@ -37,6 +37,10 @@ func NewParseJsonError(err error) *ApiError {
 	return NewApiError("unable to parse JSON into struct", err, "handler")
 }
 
+func NewValidationError(err error) *ApiError {
+	return NewApiError("unable to validate object", err, "handler")
+}
+
 // Implement the Error method for DescriptiveError
 func (e *DescriptiveError) Error() string {
 	if e.Content == nil {
