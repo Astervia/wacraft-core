@@ -6,7 +6,7 @@ require (
 	atomicgo.dev/cursor v0.2.0 // indirect
 	atomicgo.dev/keyboard v0.2.9 // indirect
 	atomicgo.dev/schedule v0.1.0 // indirect
-	github.com/Rfluid/whatsapp-cloud-api v0.1.51 // indirect
+	github.com/Rfluid/whatsapp-cloud-api v0.1.52 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/fasthttp/websocket v1.5.8 // indirect
