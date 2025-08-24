@@ -7,9 +7,9 @@ import (
 )
 
 type QueryPaginated struct {
-	FromId             uuid.UUID `json:"from_id,omitempty" query:"from_id"`
-	ToId               uuid.UUID `json:"to_id,omitempty" query:"to_id"`
-	MessagingProductId uuid.UUID `json:"messaging_product_id,omitempty" query:"messaging_product_id"`
+	FromId             *uuid.UUID `json:"from_id,omitempty" query:"from_id" validate:"omitempty"`
+	ToId               *uuid.UUID `json:"to_id,omitempty" query:"to_id" validate:"omitempty"`
+	MessagingProductId uuid.UUID  `json:"messaging_product_id,omitempty" query:"messaging_product_id" validate:"omitempty"`
 
 	common_model.UnrequiredId
 	database_model.Paginate
@@ -18,9 +18,9 @@ type QueryPaginated struct {
 }
 
 type Query struct {
-	FromId             uuid.UUID `json:"from_id,omitempty" query:"from_id"`
-	ToId               uuid.UUID `json:"to_id,omitempty" query:"to_id"`
-	MessagingProductId uuid.UUID `json:"messaging_product_id,omitempty" query:"messaging_product_id"`
+	FromId             *uuid.UUID `json:"from_id,omitempty" query:"from_id" validate:"omitempty"`
+	ToId               *uuid.UUID `json:"to_id,omitempty" query:"to_id" validate:"omitempty"`
+	MessagingProductId uuid.UUID  `json:"messaging_product_id,omitempty" query:"messaging_product_id" validate:"omitempty"`
 
 	common_model.UnrequiredId
 	database_model.DateOrderWithDeletedAt
