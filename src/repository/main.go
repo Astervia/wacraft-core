@@ -98,14 +98,14 @@ func Updates[T any](updateData interface{}, where *T, db *gorm.DB) (T, error) {
 	return entity, nil
 }
 
-func DeleteById[T any](entityId uuid.UUID, db *gorm.DB) error {
+func DeleteByID[T any](entityID uuid.UUID, db *gorm.DB) error {
 	if db == nil {
 		return errors.New("db is nil")
 	}
 
 	var entity T
 
-	if err := db.Delete(&entity, entityId).Error; err != nil {
+	if err := db.Delete(&entity, entityID).Error; err != nil {
 		return err
 	}
 

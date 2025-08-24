@@ -12,5 +12,5 @@ type UpdateWebhook struct {
 	HttpMethod    string `json:"http_method,omitempty" validate:"omitempty,oneof=GET POST PUT DELETE PATCH"`
 	Timeout       *int   `json:"timeout,omitempty" validate:"omitempty,gte=1,lte=60"`
 
-	common_model.RequiredId
+	common_model.RequiredID
 }

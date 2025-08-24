@@ -7,10 +7,10 @@ import (
 )
 
 type Message struct {
-	From             *messaging_product_entity.MessagingProductContact `json:"from,omitempty" gorm:"foreignKey:FromId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`                          // Null if manager sent the message.
-	To               *messaging_product_entity.MessagingProductContact `json:"to,omitempty" gorm:"foreignKey:ToId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`                              // Null if manager received the message.
-	MessagingProduct *messaging_product_entity.MessagingProduct        `json:"messaging_product,omitempty" gorm:"foreignKey:MessagingProductId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"` // Null if manager received the message.
-	Statuses         []*status_model.StatusFields                      `json:"statuses,omitempty" gorm:"foreignKey:MessageId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	From             *messaging_product_entity.MessagingProductContact `json:"from,omitempty" gorm:"foreignKey:FromID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`                          // Null if manager sent the message.
+	To               *messaging_product_entity.MessagingProductContact `json:"to,omitempty" gorm:"foreignKey:ToID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`                              // Null if manager received the message.
+	MessagingProduct *messaging_product_entity.MessagingProduct        `json:"messaging_product,omitempty" gorm:"foreignKey:MessagingProductID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"` // Null if manager received the message.
+	Statuses         []*status_model.StatusFields                      `json:"statuses,omitempty" gorm:"foreignKey:MessageID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
 	message_model.MessageFields
 }

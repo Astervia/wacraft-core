@@ -15,5 +15,5 @@ type UpdateContact struct {
 	Email     *string `json:"email,omitempty"`
 	PhotoPath *string `json:"photo_path,omitempty"`
 
-	common_model.RequiredId
+	common_model.RequiredID
 }

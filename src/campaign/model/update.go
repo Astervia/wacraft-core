@@ -7,7 +7,7 @@ import (
 
 type UpdateCampaign struct {
 	Name               string     `json:"name,omitempty"`
-	MessagingProductId *uuid.UUID `json:"messaging_product_id,omitempty"`
+	MessagingProductID *uuid.UUID `json:"messaging_product_id,omitempty"`
 
-	common_model.RequiredId
+	common_model.RequiredID
 }

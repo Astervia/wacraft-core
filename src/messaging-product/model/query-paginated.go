@@ -8,7 +8,7 @@ import (
 type QueryPaginated struct {
 	Name MessagingProductName `json:"name,omitempty" validate:"omitempty,oneof=WhatsApp"`
 
-	common_model.UnrequiredId
+	common_model.UnrequiredID
 	database_model.Paginate
 	database_model.DateOrder
 	database_model.DateWhere

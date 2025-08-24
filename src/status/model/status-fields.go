@@ -7,7 +7,7 @@ import (
 
 type StatusFields struct {
 	ProductData *ProductData `json:"product_data,omitempty" gorm:"type:jsonb;not null"` // Specific data about the product. For example, the webhook data received.
-	MessageId   uuid.UUID    `json:"message_id,omitempty,omitzero" gorm:"type:uuid;not null"`
+	MessageID   uuid.UUID    `json:"message_id,omitempty,omitzero" gorm:"type:uuid;not null"`
 
 	common_model.Audit
 }

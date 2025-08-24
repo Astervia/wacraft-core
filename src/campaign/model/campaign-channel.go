@@ -14,7 +14,7 @@ type CampaignChannel struct {
 	SendingMu *sync.Mutex
 
 	cancelMu *sync.Mutex
-	websocket_model.Channel[websocket_model.ClientId, CampaignResults, string]
+	websocket_model.Channel[websocket_model.ClientID, CampaignResults, string]
 }
 
 func (c *CampaignChannel) AddCancel(cancel *context.CancelFunc) {
@@ -40,7 +40,7 @@ func CreateCampaignChannel(
 ) *CampaignChannel {
 	var cancelMu sync.Mutex
 	var sendingMu sync.Mutex
-	channel := websocket_model.CreateChannel[websocket_model.ClientId, CampaignResults, string]()
+	channel := websocket_model.CreateChannel[websocket_model.ClientID, CampaignResults, string]()
 	return &CampaignChannel{
 		cancel:    cancel,
 		Sending:   false,
