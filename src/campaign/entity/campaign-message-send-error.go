@@ -7,9 +7,9 @@ import (
 
 type CampaignMessageSendError struct {
 	ErrorData         string    `json:"error_data,omitempty" gorm:"type:string; default:null"` // Error message.
-	CampaignMessageId uuid.UUID `json:"campaign_message_id" gorm:"type:uuid; not null"`
+	CampaignMessageID uuid.UUID `json:"campaign_message_id" gorm:"type:uuid; not null"`
 
-	CampaignMessage *CampaignMessage `json:"campaign_message,omitempty" gorm:"foreignKey:CampaignMessageId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	CampaignMessage *CampaignMessage `json:"campaign_message,omitempty" gorm:"foreignKey:CampaignMessageID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
 	cmn_model.Audit
 }

@@ -12,23 +12,23 @@ type MutexSwapper[T comparable] struct {
 }
 
 // LockMessage locks the mutex associated with the given message ID.
-func (s *MutexSwapper[T]) Lock(msgId T) {
+func (s *MutexSwapper[T]) Lock(msgID T) {
 	// Finding mutex and incrementing mutex use must happen
 	// inside the global mutex to prevent deleting in use mutexes
 	s.Mu.Lock()
 
 	// Finding mutex
-	mu, exists := s.mutexes[msgId]
+	mu, exists := s.mutexes[msgID]
 	if !exists {
 		mu = &sync.Mutex{}
-		s.mutexes[msgId] = mu
+		s.mutexes[msgID] = mu
 	}
 
 	// Incrementing mutext use
-	qttAc, exists := s.mutexQuantityAcquired[msgId]
+	qttAc, exists := s.mutexQuantityAcquired[msgID]
 	if !exists {
 		var count int8 = 1
-		s.mutexQuantityAcquired[msgId] = &count
+		s.mutexQuantityAcquired[msgID] = &count
 	} else {
 		*qttAc++
 	}
@@ -40,19 +40,19 @@ func (s *MutexSwapper[T]) Lock(msgId T) {
 }
 
 // UnlockMessage unlocks the mutex associated with the given message ID.
-func (s *MutexSwapper[T]) Unlock(msgId T) {
+func (s *MutexSwapper[T]) Unlock(msgID T) {
 	// Finding mutex and incrementing mutex use must happen
 	// inside the global mutex to prevent deleting in use mutexes
 	s.Mu.Lock()
 
-	mu, exists := s.mutexes[msgId]
+	mu, exists := s.mutexes[msgID]
 	if !exists {
 		// Should not happen; handle error as needed.
 		s.Mu.Unlock()
 		return
 	}
 
-	qttAc, exists := s.mutexQuantityAcquired[msgId]
+	qttAc, exists := s.mutexQuantityAcquired[msgID]
 	if !exists {
 		// Should not happen; handle error as needed.
 		s.Mu.Unlock()
@@ -61,8 +61,8 @@ func (s *MutexSwapper[T]) Unlock(msgId T) {
 
 	*qttAc--
 	if *qttAc == 0 {
-		delete(s.mutexes, msgId)
-		delete(s.mutexQuantityAcquired, msgId)
+		delete(s.mutexes, msgID)
+		delete(s.mutexQuantityAcquired, msgID)
 	}
 
 	s.Mu.Unlock()

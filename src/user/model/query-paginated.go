@@ -10,7 +10,7 @@ type QueryPaginated struct {
 	Email string `json:"email,omitempty"`
 	Role  *Role  `json:"role,omitempty"`
 
-	common_model.UnrequiredId
+	common_model.UnrequiredID
 	database_model.Paginate
 	database_model.DateOrder
 	database_model.DateWhere

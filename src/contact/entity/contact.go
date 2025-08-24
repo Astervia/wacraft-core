@@ -5,9 +5,9 @@ import (
 )
 
 type Contact struct {
-	Name      string `json:"name,omitempty"`
-	Email     string `json:"email,omitempty"`
-	PhotoPath string `json:"photo_path,omitempty"`
+	Name      *string `json:"name,omitempty"`
+	Email     *string `json:"email,omitempty"`
+	PhotoPath *string `json:"photo_path,omitempty"`
 
 	common_model.Audit
 }

@@ -6,7 +6,7 @@ import (
 )
 
 type Status struct {
-	Message *message_entity.Message `json:"json,omitempty" gorm:"foreignKey:MessageId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Message *message_entity.Message `json:"json,omitempty" gorm:"foreignKey:MessageID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
 	status_model.StatusFields
 }

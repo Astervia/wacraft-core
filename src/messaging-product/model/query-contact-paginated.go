@@ -15,7 +15,7 @@ type QueryWhatsAppContactPaginated struct {
 	ContactID uuid.UUID `json:"contact_id,omitempty" query:"contact_id"`
 	UnrequiredWhatsAppProductDetails
 
-	common_model.UnrequiredId
+	common_model.UnrequiredID
 	database_model.Paginate
 	DateOrder
 	DateWhere

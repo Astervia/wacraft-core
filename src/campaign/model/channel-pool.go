@@ -14,15 +14,15 @@ type ChannelPool struct {
 }
 
 func (cp *ChannelPool) AddUser(
-	client websocket_model.Client[websocket_model.ClientId],
+	client websocket_model.Client[websocket_model.ClientID],
 	key string,
-	campaignId uuid.UUID,
+	campaignID uuid.UUID,
 	cancel *context.CancelFunc,
 ) *CampaignChannel {
 	cp.mu.Lock()
 	defer cp.mu.Unlock()
 	// Check if the channel already exists
-	if channel, ok := cp.channels[campaignId]; ok {
+	if channel, ok := cp.channels[campaignID]; ok {
 		channel.Clients[key] = client
 
 		return &channel
@@ -31,19 +31,19 @@ func (cp *ChannelPool) AddUser(
 	channel := CreateCampaignChannel(cancel)
 	channel.AppendClient(client, key)
 
-	cp.channels[campaignId] = *channel
+	cp.channels[campaignID] = *channel
 	return channel
 }
 
 func (cp *ChannelPool) RemoveUser(
 	clientKey string,
-	campaignId uuid.UUID,
+	campaignID uuid.UUID,
 ) {
 	cp.mu.Lock()
 	defer cp.mu.Unlock()
 
 	// Check if the channel exists
-	channel, ok := cp.channels[campaignId]
+	channel, ok := cp.channels[campaignID]
 	if !ok {
 		return
 	}
@@ -51,7 +51,7 @@ func (cp *ChannelPool) RemoveUser(
 	channel.RemoveClient(clientKey)
 
 	if len(channel.Clients) == 0 {
-		delete(cp.channels, campaignId)
+		delete(cp.channels, campaignID)
 	}
 }
 

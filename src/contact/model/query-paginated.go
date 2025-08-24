@@ -6,7 +6,7 @@ import (
 )
 
 type QueryPaginated struct {
-	common_model.UnrequiredId
+	common_model.UnrequiredID
 	CreateContact
 	database_model.Paginate
 	database_model.DateOrder

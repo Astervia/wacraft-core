@@ -7,18 +7,18 @@ import (
 )
 
 type QueryPaginated struct {
-	MessageId uuid.UUID `json:"message_id,omitempty" query:"message_id"`
+	MessageID uuid.UUID `json:"message_id,omitempty" query:"message_id"`
 
-	common_model.UnrequiredId
+	common_model.UnrequiredID
 	database_model.Paginate
 	database_model.DateOrderWithDeletedAt
 	database_model.DateWhereWithDeletedAt
 }
 
 type Query struct {
-	MessageId uuid.UUID `json:"message_id,omitempty" query:"message_id"`
+	MessageID uuid.UUID `json:"message_id,omitempty" query:"message_id"`
 
-	common_model.UnrequiredId
+	common_model.UnrequiredID
 	database_model.DateOrderWithDeletedAt
 	database_model.DateWhereWithDeletedAt
 }

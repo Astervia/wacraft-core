@@ -10,9 +10,9 @@ type WebhookLog struct {
 	HttpResponseCode int         `json:"http_response_code,omitempty"`
 	ResponseData     interface{} `json:"response_data,omitempty" gorm:"serializer:json;type:jsonb"`
 
-	WebhookId uuid.UUID `json:"webhook_id" gorm:"type:uuid;not null"`
+	WebhookID uuid.UUID `json:"webhook_id" gorm:"type:uuid;not null"`
 
-	Webhook *Webhook `json:"webhook,omitempty" gorm:"foreignKey:WebhookId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Webhook *Webhook `json:"webhook,omitempty" gorm:"foreignKey:WebhookID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
 	common_model.Audit
 }

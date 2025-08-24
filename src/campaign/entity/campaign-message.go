@@ -9,11 +9,11 @@ import (
 
 type CampaignMessage struct {
 	SenderData *message_model.SenderData `json:"sender_data" gorm:"type:jsonb; not null"` // Specific data that allows to send message.
-	MessageId  uuid.UUID                 `json:"message_id,omitempty" gorm:"type:uuid;default:null"`
-	CampaignId uuid.UUID                 `json:"campaign_id,omitempty" gorm:"type:uuid; not null"`
+	MessageID  uuid.UUID                 `json:"message_id,omitempty" gorm:"type:uuid;default:null"`
+	CampaignID uuid.UUID                 `json:"campaign_id,omitempty" gorm:"type:uuid; not null"`
 
-	Message  *message_entity.Message `json:"message,omitempty" gorm:"foreignKey:MessageId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	Campaign *Campaign               `json:"campaign,omitempty" gorm:"foreignKey:CampaignId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Message  *message_entity.Message `json:"message,omitempty" gorm:"foreignKey:MessageID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Campaign *Campaign               `json:"campaign,omitempty" gorm:"foreignKey:CampaignID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
 	common_model.Audit
 }

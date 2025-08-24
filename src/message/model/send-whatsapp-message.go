@@ -6,6 +6,6 @@ import (
 )
 
 type SendWhatsAppMessage struct {
-	ToId       uuid.UUID             `json:"to_id"`       // Messaging product contact id to send message.
-	SenderData message_model.Message `json:"sender_data"` // Specific data that allows to send message.
+	ToID       uuid.UUID             `json:"to_id" validate:"required,uuid"`  // Messaging product contact id to send message.
+	SenderData message_model.Message `json:"sender_data" validate:"required"` // Specific data that allows to send message.
 }

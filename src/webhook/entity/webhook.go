@@ -51,7 +51,7 @@ func (w *Webhook) ExecuteRequest(payload interface{}, client *http.Client) (Webh
 	// Create a new WebhookLog
 	webhookLog := WebhookLog{
 		Payload:   payload,
-		WebhookId: w.Id,
+		WebhookID: w.ID,
 		Webhook:   w,
 	}
 

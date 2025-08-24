@@ -11,8 +11,8 @@ func (p *ProductDetails) ParseIndividualFieldQueries(db **gorm.DB) {
 		if p.PhoneNumber != "" {
 			*db = (*db).Where("product_details->>? = ?", "phone_number", p.PhoneNumber)
 		}
-		if p.WaId != "" {
-			*db = (*db).Where("product_details->>? = ?", "wa_id", p.WaId)
+		if p.WaID != "" {
+			*db = (*db).Where("product_details->>? = ?", "wa_id", p.WaID)
 		}
 	}
 }

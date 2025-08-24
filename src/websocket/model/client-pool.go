@@ -8,50 +8,50 @@ import (
 
 type ClientPool struct {
 	mu       *sync.Mutex
-	managers map[uuid.UUID]*ClientIdManager
+	managers map[uuid.UUID]*ClientIDManager
 }
 
-func (p *ClientPool) CreateId(userId uuid.UUID) *ClientId {
+func (p *ClientPool) CreateID(userID uuid.UUID) *ClientID {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
-	manager, ok := (p.managers)[userId]
+	manager, ok := (p.managers)[userID]
 
 	// Add manager if it doesn't exit
 	if !ok {
-		manager = &ClientIdManager{
-			GreatestConnId:   -1,
-			RemainingConnIds: []int{},
+		manager = &ClientIDManager{
+			GreatestConnID:   -1,
+			RemainingConnIDs: []int{},
 		}
-		(p.managers)[userId] = manager
+		(p.managers)[userID] = manager
 	}
 
-	return manager.CreateId(userId)
+	return manager.CreateID(userID)
 }
 
-func (p *ClientPool) DeleteId(clientId ClientId) {
+func (p *ClientPool) DeleteID(clientID ClientID) {
 	deleteFromPool := make(chan bool)
 	var wg sync.WaitGroup
 	defer wg.Wait()
 
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	manager, ok := (p.managers)[clientId.UserId]
+	manager, ok := (p.managers)[clientID.UserID]
 	if !ok {
 		return
 	}
 
 	wg.Add(1)
-	go manager.DeleteId(clientId, deleteFromPool, &wg)
+	go manager.DeleteID(clientID, deleteFromPool, &wg)
 
 	if <-deleteFromPool {
-		delete(p.managers, clientId.UserId)
+		delete(p.managers, clientID.UserID)
 	}
 }
 
-func (p *ClientPool) DeleteManager(userId uuid.UUID) {
+func (p *ClientPool) DeleteManager(userID uuid.UUID) {
 	p.mu.Lock()
-	delete(p.managers, userId)
+	delete(p.managers, userID)
 	p.mu.Unlock()
 }
 
@@ -59,6 +59,6 @@ func CreateClientPool() *ClientPool {
 	var mu sync.Mutex
 	return &ClientPool{
 		mu:       &mu,
-		managers: make(map[uuid.UUID]*ClientIdManager),
+		managers: make(map[uuid.UUID]*ClientIDManager),
 	}
 }

@@ -7,51 +7,51 @@ import (
 	"github.com/google/uuid"
 )
 
-type ClientIdManager struct {
-	GreatestConnId   int
-	RemainingConnIds []int // Conn ids not used between 0 and Greatest
+type ClientIDManager struct {
+	GreatestConnID   int
+	RemainingConnIDs []int // Conn ids not used between 0 and Greatest
 
 	mu sync.Mutex
 }
 
-func (manager *ClientIdManager) CreateId(userId uuid.UUID) *ClientId {
-	clientId := ClientId{
-		UserId: userId,
+func (manager *ClientIDManager) CreateID(userID uuid.UUID) *ClientID {
+	clientID := ClientID{
+		UserID: userID,
 	}
 
 	manager.mu.Lock()
 	defer manager.mu.Unlock()
 
 	// Add greatest connection id and return if there are no remaining connection ids
-	if len(manager.RemainingConnIds) == 0 {
-		manager.GreatestConnId++
-		clientId.ConnId = manager.GreatestConnId
-		return &clientId
+	if len(manager.RemainingConnIDs) == 0 {
+		manager.GreatestConnID++
+		clientID.ConnID = manager.GreatestConnID
+		return &clientID
 	}
 
 	// With remaining connection ids, use the first one and remove it from the list
-	clientId.ConnId = manager.RemainingConnIds[0]
-	manager.RemainingConnIds = manager.RemainingConnIds[1:]
+	clientID.ConnID = manager.RemainingConnIDs[0]
+	manager.RemainingConnIDs = manager.RemainingConnIDs[1:]
 
-	return &clientId
+	return &clientID
 }
 
-func (manager *ClientIdManager) DeleteId(clientId ClientId, deleteFromPool chan<- bool, wg *sync.WaitGroup) {
+func (manager *ClientIDManager) DeleteID(clientID ClientID, deleteFromPool chan<- bool, wg *sync.WaitGroup) {
 	manager.mu.Lock()
 	defer manager.mu.Unlock()
 	defer wg.Done()
 
-	removedConnId := clientId.ConnId
+	removedConnID := clientID.ConnID
 
 	// If it is the greatest connection, decrement it
-	if removedConnId == manager.GreatestConnId {
-		manager.GreatestConnId--
+	if removedConnID == manager.GreatestConnID {
+		manager.GreatestConnID--
 
 		// Check if decremented value is in array. If it is, remove than decrement again and check again
-		checkIfGreatestConnIdEqualsGreatestRemaining(manager)
+		checkIfGreatestConnIDEqualsGreatestRemaining(manager)
 
 		// If manager is empty, remove it from the pool
-		if manager.GreatestConnId == -1 {
+		if manager.GreatestConnID == -1 {
 			// Deletion will occur only if this is the deletion of the last element
 			deleteFromPool <- true
 			return
@@ -65,18 +65,18 @@ func (manager *ClientIdManager) DeleteId(clientId ClientId, deleteFromPool chan<
 	}()
 
 	// Add the connection id to the remaining inserting sorted in the array
-	common_service.InsertSorted(manager.RemainingConnIds, removedConnId)
+	common_service.InsertSorted(manager.RemainingConnIDs, removedConnID)
 
-	manager.RemainingConnIds = append(manager.RemainingConnIds, clientId.ConnId)
+	manager.RemainingConnIDs = append(manager.RemainingConnIDs, clientID.ConnID)
 }
 
-func checkIfGreatestConnIdEqualsGreatestRemaining(manager *ClientIdManager) {
-	remainingLen := len(manager.RemainingConnIds)
+func checkIfGreatestConnIDEqualsGreatestRemaining(manager *ClientIDManager) {
+	remainingLen := len(manager.RemainingConnIDs)
 	// If greatest remaining equals greatest conn id, remove from the array and decrement greatest conn id than check again
-	if remainingLen > 0 && manager.RemainingConnIds[remainingLen-1] == manager.GreatestConnId {
-		manager.GreatestConnId--
-		manager.RemainingConnIds = manager.RemainingConnIds[:(remainingLen - 1)]
+	if remainingLen > 0 && manager.RemainingConnIDs[remainingLen-1] == manager.GreatestConnID {
+		manager.GreatestConnID--
+		manager.RemainingConnIDs = manager.RemainingConnIDs[:(remainingLen - 1)]
 
-		checkIfGreatestConnIdEqualsGreatestRemaining(manager)
+		checkIfGreatestConnIDEqualsGreatestRemaining(manager)
 	}
 }

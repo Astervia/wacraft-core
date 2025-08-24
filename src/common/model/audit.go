@@ -7,7 +7,7 @@ import (
 )
 
 type Audit struct {
-	Id        uuid.UUID `json:"id,omitempty" gorm:"primaryKey;type:uuid;default:gen_random_uuid();not null"`
+	ID        uuid.UUID `json:"id,omitempty" gorm:"primaryKey;type:uuid;default:gen_random_uuid();not null"`
 	CreatedAt time.Time `json:"created_at,omitempty" gorm:"autoCreateTime"`
 	UpdatedAt time.Time `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
 }

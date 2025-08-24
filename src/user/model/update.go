@@ -7,10 +7,10 @@ type Update struct {
 	Email string `json:"email,omitempty"`
 }
 
-type UpdateWithId struct {
+type UpdateWithID struct {
 	Role *Role `json:"role,omitempty"`
 
-	common_model.RequiredId
+	common_model.RequiredID
 	Update
 }
 
