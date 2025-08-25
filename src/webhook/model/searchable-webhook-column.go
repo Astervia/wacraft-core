@@ -4,7 +4,7 @@ type SearchableWebhookColumn string
 
 var (
 	URL         SearchableWebhookColumn = "url"
-	Method      SearchableWebhookColumn = "method"
+	Method      SearchableWebhookColumn = "http_method"
 	EventColumn SearchableWebhookColumn = "event"
 )
 
