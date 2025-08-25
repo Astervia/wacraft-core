@@ -8,6 +8,10 @@ import (
 func RegisterAllValidators(v *validator.Validate) error {
 	registrations := []func(*validator.Validate) error{
 		RegisterWebhookEventValidator,
+		RegisterSearchableCampaignColumnValidator,
+		RegisterSearchableUserColumnValidator,
+		RegisterSearchableWebhookColumnValidator,
+		RegisterJsonMessageKeyValidator,
 	}
 
 	for _, register := range registrations {
