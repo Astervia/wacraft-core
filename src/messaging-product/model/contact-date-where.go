@@ -17,10 +17,10 @@ type DateWhere struct {
 func (date *DateWhere) Where(db **gorm.DB, prefix string) error {
 	prefix = database_model.AddDotIfNotEmpty(prefix)
 
-	if !date.LastReadAtLeq.IsZero() {
+	if date.LastReadAtLeq != nil {
 		*db = (*db).Where(prefix+"last_read_at_leq <= ?", date.LastReadAtLeq)
 	}
-	if !date.LastReadAtGeq.IsZero() {
+	if date.LastReadAtGeq != nil {
 		*db = (*db).Where(prefix+"last_read_at_leq >= ?", date.LastReadAtGeq)
 	}
 	return date.DateWhere.Where(db, prefix)
