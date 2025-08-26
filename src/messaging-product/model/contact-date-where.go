@@ -8,8 +8,8 @@ import (
 )
 
 type DateWhere struct {
-	LastReadAtLeq time.Time `json:"last_read_at_leq,omitempty,omitzero" query:"last_read_at_leq,omitempty,omitzero"`
-	LastReadAtGeq time.Time `json:"last_read_at_geq,omitempty,omitzero" query:"last_read_at_geq,omitempty,omitzero"`
+	LastReadAtLeq *time.Time `json:"last_read_at_leq,omitempty,omitzero" query:"last_read_at_leq,omitempty,omitzero"`
+	LastReadAtGeq *time.Time `json:"last_read_at_geq,omitempty,omitzero" query:"last_read_at_geq,omitempty,omitzero"`
 
 	database_model.DateWhere
 }
