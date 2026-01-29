@@ -9,6 +9,7 @@ import (
 type QueryPaginated struct {
 	Name               string     `json:"name,omitempty"`
 	MessagingProductID *uuid.UUID `json:"messaging_product_id,omitempty" query:"messaging_product_id"`
+	WorkspaceID        *uuid.UUID `json:"workspace_id,omitempty" query:"workspace_id"`
 
 	common_model.UnrequiredID
 	database_model.Paginate
