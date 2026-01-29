@@ -8,10 +8,11 @@ import (
 )
 
 type User struct {
-	Name     string           `json:"name,omitempty" gorm:"not null"`
-	Email    string           `json:"email,omitempty" gorm:"not null;unique"`
-	Password string           `json:"password,omitempty" gorm:"not null"`
-	Role     *user_model.Role `json:"role,omitempty" gorm:"type:varchar(20);not null;default:'user'"`
+	Name          string           `json:"name,omitempty" gorm:"not null"`
+	Email         string           `json:"email,omitempty" gorm:"not null;unique"`
+	Password      string           `json:"password,omitempty" gorm:"not null"`
+	Role          *user_model.Role `json:"role,omitempty" gorm:"type:varchar(20);not null;default:'user'"` // Deprecated: use workspace policies
+	EmailVerified bool             `json:"email_verified" gorm:"default:false"`
 
 	common_model.Audit
 }

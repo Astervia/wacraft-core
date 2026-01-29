@@ -10,6 +10,8 @@ import (
 
 	common_model "github.com/Astervia/wacraft-core/src/common/model"
 	webhook_model "github.com/Astervia/wacraft-core/src/webhook/model"
+	workspace_entity "github.com/Astervia/wacraft-core/src/workspace/entity"
+	"github.com/google/uuid"
 )
 
 type Webhook struct {
@@ -18,7 +20,10 @@ type Webhook struct {
 	HttpMethod    string `json:"http_method,omitempty" gorm:"not null"`
 	Timeout       *int   `json:"timeout,omitempty" gorm:"default:1"` // The timeout in seconds. 0 means no timeout
 
-	Event webhook_model.Event `json:"event,omitempty" gorm:"not null"`
+	Event       webhook_model.Event `json:"event,omitempty" gorm:"not null"`
+	WorkspaceID *uuid.UUID          `json:"workspace_id,omitempty" gorm:"type:uuid;index"`
+
+	Workspace *workspace_entity.Workspace `json:"workspace,omitempty" gorm:"foreignKey:WorkspaceID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 
 	common_model.Audit
 }

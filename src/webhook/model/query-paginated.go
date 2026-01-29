@@ -8,10 +8,11 @@ import (
 
 // QueryPaginated represents the paginated query structure for webhooks
 type QueryPaginated struct {
-	Url        string `json:"url,omitempty"`                             // Optional URL filter
-	Event      Event  `json:"event,omitempty"`                           // Optional event filter
-	HttpMethod string `json:"http_method,omitempty" query:"http_method"` // Optional HTTP method filter
-	Timeout    *int   `json:"timeout,omitempty"`
+	Url         string     `json:"url,omitempty"`                             // Optional URL filter
+	Event       Event      `json:"event,omitempty"`                           // Optional event filter
+	HttpMethod  string     `json:"http_method,omitempty" query:"http_method"` // Optional HTTP method filter
+	Timeout     *int       `json:"timeout,omitempty"`
+	WorkspaceID *uuid.UUID `json:"workspace_id,omitempty" query:"workspace_id"`
 
 	database_model.Paginate   // Pagination structure (e.g., limit, offset)
 	database_model.DateOrder  // Date ordering options (ASC/DESC)
