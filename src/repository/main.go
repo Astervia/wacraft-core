@@ -81,7 +81,7 @@ func Create[T any](entity T, db *gorm.DB) (T, error) {
 	return entity, nil
 }
 
-func Updates[T any](updateData interface{}, where *T, db *gorm.DB) (T, error) {
+func Updates[T any](updateData any, where *T, db *gorm.DB) (T, error) {
 	var entity T
 	if db == nil {
 		return entity, errors.New("db is nil")

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	message_model "github.com/Rfluid/whatsapp-cloud-api/src/message/model"
+	message_model "github.com/Rfluid/whatsapp-cloud-api/src/message"
 )
 
 type ProductData struct {
@@ -13,7 +13,7 @@ type ProductData struct {
 }
 
 // Implement the sql.Scanner interface
-func (pd *ProductData) Scan(value interface{}) error {
+func (pd *ProductData) Scan(value any) error {
 	bytes, ok := value.([]byte)
 	if !ok {
 		return fmt.Errorf("failed to scan ProductData: expected []byte, got %T", value)
