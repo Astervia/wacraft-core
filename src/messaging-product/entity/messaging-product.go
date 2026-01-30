@@ -14,8 +14,8 @@ type MessagingProduct struct {
 	WorkspaceID   *uuid.UUID                                   `json:"workspace_id,omitempty" gorm:"type:uuid;index"`
 	PhoneConfigID *uuid.UUID                                   `json:"phone_config_id,omitempty" gorm:"type:uuid;index"`
 
-	Workspace   *workspace_entity.Workspace       `json:"workspace,omitempty" gorm:"foreignKey:WorkspaceID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	PhoneConfig *phone_config_entity.PhoneConfig `json:"phone_config,omitempty" gorm:"foreignKey:PhoneConfigID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Workspace   *workspace_entity.Workspace      `json:"workspace,omitempty" gorm:"foreignKey:WorkspaceID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	PhoneConfig *phone_config_entity.PhoneConfig `json:"phone_config,omitempty" gorm:"foreignKey:PhoneConfigID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
 	common_model.Audit
 }
