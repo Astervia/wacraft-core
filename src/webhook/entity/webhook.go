@@ -28,7 +28,7 @@ type Webhook struct {
 	common_model.Audit
 }
 
-func (w *Webhook) NewRequest(payload interface{}) (*http.Request, error) {
+func (w *Webhook) NewRequest(payload any) (*http.Request, error) {
 	// Convert the payload to JSON
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
@@ -52,7 +52,7 @@ func (w *Webhook) NewRequest(payload interface{}) (*http.Request, error) {
 	return req, nil
 }
 
-func (w *Webhook) ExecuteRequest(payload interface{}, client *http.Client) (WebhookLog, error) {
+func (w *Webhook) ExecuteRequest(payload any, client *http.Client) (WebhookLog, error) {
 	// Create a new WebhookLog
 	webhookLog := WebhookLog{
 		Payload:   payload,

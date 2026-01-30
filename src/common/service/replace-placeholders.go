@@ -17,19 +17,19 @@ func ReplacePlaceholders[U any, V any](
 		var empty U
 		return empty, err
 	}
-	var mapToReplace map[string]interface{}
+	var mapToReplace map[string]any
 	if err := json.Unmarshal(replaceData, &mapToReplace); err != nil {
 		var empty U
 		return empty, err
 	}
 
-	// Marshal struct1 to JSON and unmarshal to an interface{}
+	// Marshal struct1 to JSON and unmarshal to an any
 	dataToBeReplaced, err := json.Marshal(toBeReplaced)
 	if err != nil {
 		var empty U
 		return empty, err
 	}
-	var mapToBeReplaced interface{}
+	var mapToBeReplaced any
 	if err := json.Unmarshal(dataToBeReplaced, &mapToBeReplaced); err != nil {
 		var empty U
 		return empty, err
@@ -57,17 +57,17 @@ func ReplacePlaceholders[U any, V any](
 }
 
 func replacePlaceholdersInMap(
-	data *interface{},
-	mapToReplace map[string]interface{},
+	data *any,
+	mapToReplace map[string]any,
 	name string,
 ) {
 	switch v := (*data).(type) {
-	case map[string]interface{}:
+	case map[string]any:
 		for key, value := range v {
 			replacePlaceholdersInMap(&value, mapToReplace, name)
 			v[key] = value
 		}
-	case []interface{}:
+	case []any:
 		for i, value := range v {
 			replacePlaceholdersInMap(&value, mapToReplace, name)
 			v[i] = value
