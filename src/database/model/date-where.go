@@ -50,7 +50,7 @@ func (date *DateWhereWithDeletedAt) Where(db **gorm.DB, prefix string) error {
 }
 
 func AddDotIfNotEmpty(prefix string) string {
-	if prefix != "" {
+	if prefix != "" && prefix[len(prefix)-1] != '.' {
 		prefix += "."
 	}
 	return prefix
