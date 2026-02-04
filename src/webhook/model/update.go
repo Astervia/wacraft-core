@@ -12,5 +12,12 @@ type UpdateWebhook struct {
 	HttpMethod    string `json:"http_method,omitempty" validate:"omitempty,oneof=GET POST PUT DELETE PATCH"`
 	Timeout       *int   `json:"timeout,omitempty" validate:"omitempty,gte=1,lte=60"`
 
+	// New fields for enhanced webhook functionality
+	MaxRetries    *int              `json:"max_retries,omitempty" validate:"omitempty,gte=0,lte=10"`         // Max retry attempts
+	RetryDelayMs  *int              `json:"retry_delay_ms,omitempty" validate:"omitempty,gte=100,lte=60000"` // Base retry delay in ms
+	IsActive      *bool             `json:"is_active,omitempty"`                                             // Enable/disable webhook
+	CustomHeaders map[string]string `json:"custom_headers,omitempty"`                                        // Custom headers
+	EventFilter   *EventFilter      `json:"event_filter,omitempty"`                                          // Event filter
+
 	common_model.RequiredID
 }

@@ -14,6 +14,15 @@ import (
 	"github.com/google/uuid"
 )
 
+// CircuitState represents the state of a circuit breaker
+type CircuitState string
+
+const (
+	CircuitClosed   CircuitState = "closed"
+	CircuitOpen     CircuitState = "open"
+	CircuitHalfOpen CircuitState = "half_open"
+)
+
 type Webhook struct {
 	Url           string `json:"url,omitempty" gorm:"not null"`
 	Authorization string `json:"authorization,omitempty" gorm:"default:null"`
@@ -24,6 +33,27 @@ type Webhook struct {
 	WorkspaceID *uuid.UUID          `json:"workspace_id,omitempty" gorm:"type:uuid;index"`
 
 	Workspace *workspace_entity.Workspace `json:"workspace,omitempty" gorm:"foreignKey:WorkspaceID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+
+	// Security
+	SigningSecret  string `json:"-" gorm:"default:null"` // Never exposed in JSON
+	SigningEnabled bool   `json:"signing_enabled,omitempty" gorm:"default:false"`
+
+	// Reliability
+	MaxRetries   int  `json:"max_retries,omitempty" gorm:"default:3"`
+	RetryDelayMs int  `json:"retry_delay_ms,omitempty" gorm:"default:1000"`
+	IsActive     bool `json:"is_active,omitempty" gorm:"default:true"`
+
+	// Custom headers
+	CustomHeaders map[string]string `json:"custom_headers,omitempty" gorm:"serializer:json;type:jsonb"`
+
+	// Event filtering
+	EventFilter *webhook_model.EventFilter `json:"event_filter,omitempty" gorm:"serializer:json;type:jsonb"`
+
+	// Circuit breaker
+	CircuitState    CircuitState `json:"circuit_state,omitempty" gorm:"default:'closed'"`
+	FailureCount    int          `json:"failure_count,omitempty" gorm:"default:0"`
+	LastFailureAt   *time.Time   `json:"last_failure_at,omitempty"`
+	CircuitOpenedAt *time.Time   `json:"circuit_opened_at,omitempty"`
 
 	common_model.Audit
 }
