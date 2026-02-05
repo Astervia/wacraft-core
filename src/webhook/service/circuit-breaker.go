@@ -62,7 +62,7 @@ func (cb *CircuitBreaker) AllowRequest(webhookID uuid.UUID) (bool, error) {
 func (cb *CircuitBreaker) RecordSuccess(webhookID uuid.UUID) error {
 	return cb.db.Model(&webhook_entity.Webhook{}).
 		Where("id = ?", webhookID).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"circuit_state":     webhook_entity.CircuitClosed,
 			"failure_count":     0,
 			"last_failure_at":   nil,
@@ -84,7 +84,7 @@ func (cb *CircuitBreaker) RecordFailure(webhookID uuid.UUID) error {
 	if webhook.CircuitState == webhook_entity.CircuitHalfOpen {
 		return cb.db.Model(&webhook_entity.Webhook{}).
 			Where("id = ?", webhookID).
-			Updates(map[string]interface{}{
+			Updates(map[string]any{
 				"circuit_state":     webhook_entity.CircuitOpen,
 				"failure_count":     newFailureCount,
 				"last_failure_at":   now,
@@ -96,7 +96,7 @@ func (cb *CircuitBreaker) RecordFailure(webhookID uuid.UUID) error {
 	if newFailureCount >= FailureThreshold {
 		return cb.db.Model(&webhook_entity.Webhook{}).
 			Where("id = ?", webhookID).
-			Updates(map[string]interface{}{
+			Updates(map[string]any{
 				"circuit_state":     webhook_entity.CircuitOpen,
 				"failure_count":     newFailureCount,
 				"last_failure_at":   now,
@@ -107,7 +107,7 @@ func (cb *CircuitBreaker) RecordFailure(webhookID uuid.UUID) error {
 	// Just increment the failure count
 	return cb.db.Model(&webhook_entity.Webhook{}).
 		Where("id = ?", webhookID).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"failure_count":   newFailureCount,
 			"last_failure_at": now,
 		}).Error

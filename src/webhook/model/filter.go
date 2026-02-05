@@ -22,7 +22,7 @@ const (
 type FilterCondition struct {
 	Path     string         `json:"path"`            // JSON path to the field (e.g., "data.type")
 	Operator FilterOperator `json:"operator"`        // Comparison operator
-	Value    interface{}    `json:"value,omitempty"` // Value to compare against (not needed for "exists")
+	Value    any            `json:"value,omitempty"` // Value to compare against (not needed for "exists")
 }
 
 // EventFilter represents the filter configuration for webhook events
