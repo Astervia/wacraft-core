@@ -11,7 +11,7 @@ import (
 // EvaluateFilter evaluates an event filter against a payload
 // Returns true if the payload matches the filter, false otherwise
 // If the filter is nil or has no conditions, returns true (allow all)
-func EvaluateFilter(filter *webhook_model.EventFilter, payload interface{}) bool {
+func EvaluateFilter(filter *webhook_model.EventFilter, payload any) bool {
 	if filter == nil || len(filter.Conditions) == 0 {
 		return true
 	}
@@ -52,7 +52,7 @@ func EvaluateFilter(filter *webhook_model.EventFilter, payload interface{}) bool
 }
 
 // evaluateCondition evaluates a single filter condition
-func evaluateCondition(condition webhook_model.FilterCondition, payload map[string]interface{}) bool {
+func evaluateCondition(condition webhook_model.FilterCondition, payload map[string]any) bool {
 	// Get the value at the JSON path
 	value, exists := getValueByPath(payload, condition.Path)
 
@@ -85,16 +85,16 @@ func evaluateCondition(condition webhook_model.FilterCondition, payload map[stri
 
 // getValueByPath retrieves a value from a nested map using dot notation
 // e.g., "data.message.type" -> payload["data"]["message"]["type"]
-func getValueByPath(payload map[string]interface{}, path string) (interface{}, bool) {
+func getValueByPath(payload map[string]any, path string) (any, bool) {
 	parts := strings.Split(path, ".")
-	current := interface{}(payload)
+	current := any(payload)
 
 	for _, part := range parts {
 		if part == "" {
 			continue
 		}
 
-		m, ok := current.(map[string]interface{})
+		m, ok := current.(map[string]any)
 		if !ok {
 			return nil, false
 		}
@@ -110,7 +110,7 @@ func getValueByPath(payload map[string]interface{}, path string) (interface{}, b
 }
 
 // compareValues compares two values for equality
-func compareValues(a, b interface{}) bool {
+func compareValues(a, b any) bool {
 	// Handle nil cases
 	if a == nil && b == nil {
 		return true
@@ -133,7 +133,7 @@ func compareValues(a, b interface{}) bool {
 }
 
 // containsValue checks if a contains b (string containment)
-func containsValue(a, b interface{}) bool {
+func containsValue(a, b any) bool {
 	aStr, aOk := toString(a)
 	bStr, bOk := toString(b)
 
@@ -145,7 +145,7 @@ func containsValue(a, b interface{}) bool {
 }
 
 // matchesRegex checks if a value matches a regex pattern
-func matchesRegex(value, pattern interface{}) bool {
+func matchesRegex(value, pattern any) bool {
 	valueStr, ok := toString(value)
 	if !ok {
 		return false
@@ -165,7 +165,7 @@ func matchesRegex(value, pattern interface{}) bool {
 }
 
 // toString converts a value to string
-func toString(v interface{}) (string, bool) {
+func toString(v any) (string, bool) {
 	switch val := v.(type) {
 	case string:
 		return val, true
@@ -188,10 +188,10 @@ func toString(v interface{}) (string, bool) {
 	}
 }
 
-// toMap converts a value to map[string]interface{}
-func toMap(v interface{}) (map[string]interface{}, bool) {
+// toMap converts a value to map[string]any
+func toMap(v any) (map[string]any, bool) {
 	// If already a map, return it
-	if m, ok := v.(map[string]interface{}); ok {
+	if m, ok := v.(map[string]any); ok {
 		return m, true
 	}
 
@@ -201,7 +201,7 @@ func toMap(v interface{}) (map[string]interface{}, bool) {
 		return nil, false
 	}
 
-	var m map[string]interface{}
+	var m map[string]any
 	if err := json.Unmarshal(b, &m); err != nil {
 		return nil, false
 	}
