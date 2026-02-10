@@ -11,6 +11,12 @@ type AcceptInvitationRequest struct {
 	Password *string `json:"password,omitempty" validate:"omitempty,min=8,max=72"` // Required if user doesn't exist
 }
 
+type AcceptInvitationResponse struct {
+	Message     string `json:"message"`
+	WorkspaceID string `json:"workspace_id"`
+	UserID      string `json:"user_id"`
+}
+
 type InvitationResponse struct {
 	ID          string   `json:"id"`
 	WorkspaceID string   `json:"workspace_id"`
