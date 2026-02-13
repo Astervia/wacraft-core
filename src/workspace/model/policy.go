@@ -17,6 +17,9 @@ const (
 	PolicyCampaignRun       Policy = "campaign.run"
 	PolicyWebhookRead       Policy = "webhook.read"
 	PolicyWebhookManage     Policy = "webhook.manage"
+	PolicyBillingRead       Policy = "billing.read"
+	PolicyBillingManage     Policy = "billing.manage"
+	PolicyBillingAdmin      Policy = "billing.admin"
 )
 
 var AllPolicies = []Policy{
@@ -34,6 +37,9 @@ var AllPolicies = []Policy{
 	PolicyCampaignRun,
 	PolicyWebhookRead,
 	PolicyWebhookManage,
+	PolicyBillingRead,
+	PolicyBillingManage,
+	PolicyBillingAdmin,
 }
 
 func IsValidPolicy(p Policy) bool {
