@@ -20,7 +20,11 @@ type Subscription struct {
 	ExpiresAt           time.Time          `json:"expires_at" gorm:"not null;index"`
 	CancelledAt         *time.Time         `json:"cancelled_at,omitempty"`
 	PaymentProvider     string             `json:"payment_provider" gorm:"type:varchar(50);not null;default:'manual'"`
-	PaymentExternalID   *string            `json:"payment_external_id,omitempty"`
+	PaymentExternalID    *string                  `json:"payment_external_id,omitempty"`
+	PaymentMode          billing_model.PaymentMode `json:"payment_mode" gorm:"type:varchar(20);not null;default:'payment'"` // "payment" (one-time) or "subscription" (recurring)
+	StripeSubscriptionID *string                   `json:"stripe_subscription_id,omitempty"`  // Stripe subscription ID for recurring plans
+	CancelAtPeriodEnd    bool                      `json:"cancel_at_period_end" gorm:"not null;default:false"` // True when cancellation is pending (active until ExpiresAt)
+	Status               billing_model.SubscriptionStatus `json:"status" gorm:"type:varchar(20);not null;default:'active'"` // "pending", "active", "cancelled"
 
 	Plan      *Plan                        `json:"plan,omitempty" gorm:"foreignKey:PlanID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	User      *user_entity.User            `json:"user,omitempty" gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
@@ -32,7 +36,7 @@ type Subscription struct {
 // IsActive checks if the subscription is currently active.
 func (s *Subscription) IsActive() bool {
 	now := time.Now()
-	return s.CancelledAt == nil && now.After(s.StartsAt) && now.Before(s.ExpiresAt)
+	return s.Status == billing_model.SubscriptionStatusActive && s.CancelledAt == nil && now.After(s.StartsAt) && now.Before(s.ExpiresAt)
 }
 
 // EffectiveThroughput returns the throughput limit considering any override.
