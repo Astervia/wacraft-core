@@ -16,6 +16,8 @@ type Plan struct {
 	IsDefault       bool    `json:"is_default" gorm:"not null;default:false"` // Fallback free plan
 	IsCustom        bool    `json:"is_custom" gorm:"not null;default:false"`  // Admin-created custom plans
 	Active          bool    `json:"active" gorm:"not null;default:true"`      // Available for purchase
+	StripePriceID   *string `json:"stripe_price_id,omitempty"`   // Cached Stripe Price ID for subscription checkouts
+	StripeProductID *string `json:"stripe_product_id,omitempty"` // Cached Stripe Product ID for subscription checkouts
 
 	common_model.Audit
 }
