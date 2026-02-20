@@ -7,7 +7,7 @@ type CreateInvitationRequest struct {
 
 type AcceptInvitationRequest struct {
 	Token    string  `json:"token" validate:"required"`
-	Name     *string `json:"name,omitempty" validate:"omitempty,min=2,max=100"`     // Required if user doesn't exist
+	Name     *string `json:"name,omitempty" validate:"omitempty,min=2,max=100"`    // Required if user doesn't exist
 	Password *string `json:"password,omitempty" validate:"omitempty,min=8,max=72"` // Required if user doesn't exist
 }
 

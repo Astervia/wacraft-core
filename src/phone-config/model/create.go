@@ -3,8 +3,8 @@ package phone_config_model
 // CreatePhoneConfig is used to create a new phone configuration
 type CreatePhoneConfig struct {
 	Name               string `json:"name" validate:"required"`
-	WabaID             string `json:"waba_id" validate:"required"`             // Phone Number ID from Meta
-	WabaAccountID      string `json:"waba_account_id" validate:"required"`     // WhatsApp Business Account ID
+	WabaID             string `json:"waba_id" validate:"required"`         // Phone Number ID from Meta
+	WabaAccountID      string `json:"waba_account_id" validate:"required"` // WhatsApp Business Account ID
 	DisplayPhone       string `json:"display_phone" validate:"required"`
 	AccessToken        string `json:"access_token" validate:"required"`
 	MetaAppSecret      string `json:"meta_app_secret" validate:"required"`

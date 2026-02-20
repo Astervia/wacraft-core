@@ -6,7 +6,7 @@ import "github.com/google/uuid"
 type CheckoutRequest struct {
 	PlanID      uuid.UUID   `json:"plan_id" validate:"required"`
 	Scope       Scope       `json:"scope" validate:"required,oneof=user workspace"`
-	WorkspaceID *uuid.UUID  `json:"workspace_id,omitempty"` // Required when scope=workspace
+	WorkspaceID *uuid.UUID  `json:"workspace_id,omitempty"`                                       // Required when scope=workspace
 	PaymentMode PaymentMode `json:"payment_mode" validate:"omitempty,oneof=payment subscription"` // Defaults to "payment" if empty
 	SuccessURL  string      `json:"success_url" validate:"required,url"`
 	CancelURL   string      `json:"cancel_url" validate:"required,url"`
