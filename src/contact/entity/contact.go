@@ -7,9 +7,9 @@ import (
 )
 
 type Contact struct {
-	Name        *string   `json:"name,omitempty"`
-	Email       *string   `json:"email,omitempty"`
-	PhotoPath   *string   `json:"photo_path,omitempty"`
+	Name        *string    `json:"name,omitempty"`
+	Email       *string    `json:"email,omitempty"`
+	PhotoPath   *string    `json:"photo_path,omitempty"`
 	WorkspaceID *uuid.UUID `json:"workspace_id,omitempty" gorm:"type:uuid;index"`
 
 	Workspace *workspace_entity.Workspace `json:"workspace,omitempty" gorm:"foreignKey:WorkspaceID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
