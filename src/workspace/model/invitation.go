@@ -5,22 +5,20 @@ type CreateInvitationRequest struct {
 	Policies []Policy `json:"policies" validate:"required,min=1"`
 }
 
-type AcceptInvitationRequest struct {
-	Token    string  `json:"token" validate:"required"`
-	Name     *string `json:"name,omitempty" validate:"omitempty,min=2,max=100"`    // Required if user doesn't exist
-	Password *string `json:"password,omitempty" validate:"omitempty,min=8,max=72"` // Required if user doesn't exist
+type ClaimInvitationRequest struct {
+	Token string `json:"token" validate:"required"`
 }
 
-type AcceptInvitationResponse struct {
+type ClaimInvitationResponse struct {
 	Message     string `json:"message"`
 	WorkspaceID string `json:"workspace_id"`
-	UserID      string `json:"user_id"`
 }
 
 type InvitationResponse struct {
 	ID          string   `json:"id"`
 	WorkspaceID string   `json:"workspace_id"`
 	Email       string   `json:"email"`
+	Token       string   `json:"token"`
 	Policies    []Policy `json:"policies"`
 	ExpiresAt   string   `json:"expires_at"`
 	AcceptedAt  *string  `json:"accepted_at,omitempty"`
