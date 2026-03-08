@@ -9,8 +9,6 @@ type UpdatePlan struct {
 	ThroughputLimit *int    `json:"throughput_limit,omitempty"` // <= 0 means unlimited throughput
 	WindowSeconds   *int    `json:"window_seconds,omitempty" validate:"omitempty,gt=0"`
 	DurationDays    *int    `json:"duration_days,omitempty" validate:"omitempty,gt=0"`
-	PriceCents      *int64  `json:"price_cents,omitempty" validate:"omitempty,gte=0"`
-	Currency        *string `json:"currency,omitempty"`
 	IsDefault       *bool   `json:"is_default,omitempty"`
 	IsCustom        *bool   `json:"is_custom,omitempty"`
 	Active          *bool   `json:"active,omitempty"`

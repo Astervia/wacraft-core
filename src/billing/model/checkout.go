@@ -5,6 +5,7 @@ import "github.com/google/uuid"
 // CheckoutRequest initiates a plan purchase through a payment provider.
 type CheckoutRequest struct {
 	PlanID      uuid.UUID   `json:"plan_id" validate:"required"`
+	Currency    string      `json:"currency,omitempty"` // If empty, uses the plan's default price
 	Scope       Scope       `json:"scope" validate:"required,oneof=user workspace"`
 	WorkspaceID *uuid.UUID  `json:"workspace_id,omitempty"`                                       // Required when scope=workspace
 	PaymentMode PaymentMode `json:"payment_mode" validate:"omitempty,oneof=payment subscription"` // Defaults to "payment" if empty

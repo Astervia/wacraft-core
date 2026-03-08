@@ -27,3 +27,9 @@ type EndpointWeightQueryPaginated struct {
 	database_model.DateOrder
 	database_model.DateWhere
 }
+
+type PlanPriceQueryPaginated struct {
+	database_model.Paginate
+	database_model.DateOrder
+	database_model.DateWhere
+}
