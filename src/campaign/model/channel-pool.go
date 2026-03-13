@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	synch_contract "github.com/Astervia/wacraft-core/src/synch/contract"
 	websocket_model "github.com/Astervia/wacraft-core/src/websocket/model"
 	"github.com/google/uuid"
 )
@@ -11,6 +12,10 @@ import (
 type ChannelPool struct {
 	mu       *sync.Mutex
 	channels map[uuid.UUID]CampaignChannel
+
+	// Distributed primitives (nil in memory-only mode).
+	cache  synch_contract.DistributedCache
+	pubsub synch_contract.PubSub
 }
 
 func (cp *ChannelPool) AddUser(
@@ -28,7 +33,12 @@ func (cp *ChannelPool) AddUser(
 		return &channel
 	}
 
-	channel := CreateCampaignChannel(cancel)
+	var channel *CampaignChannel
+	if cp.cache != nil || cp.pubsub != nil {
+		channel = CreateCampaignChannelWithDistributed(cancel, cp.cache, cp.pubsub, campaignID.String())
+	} else {
+		channel = CreateCampaignChannel(cancel)
+	}
 	channel.AppendClient(client, key)
 
 	cp.channels[campaignID] = *channel
@@ -61,4 +71,16 @@ func CreateChannelPool() *ChannelPool {
 		mu:       &mu,
 		channels: make(map[uuid.UUID]CampaignChannel),
 	}
+}
+
+// CreateChannelPoolWithDistributed creates a ChannelPool that passes
+// distributed cache and pub/sub to every CampaignChannel it creates.
+func CreateChannelPoolWithDistributed(
+	cache synch_contract.DistributedCache,
+	pubsub synch_contract.PubSub,
+) *ChannelPool {
+	pool := CreateChannelPool()
+	pool.cache = cache
+	pool.pubsub = pubsub
+	return pool
 }
