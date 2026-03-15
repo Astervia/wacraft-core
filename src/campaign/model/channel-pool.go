@@ -61,6 +61,8 @@ func (cp *ChannelPool) RemoveUser(
 	channel.RemoveClient(clientKey)
 
 	if len(channel.Clients) == 0 {
+		channel.UnsubscribeProgress()
+		channel.UnsubscribeCancel()
 		delete(cp.channels, campaignID)
 	}
 }
