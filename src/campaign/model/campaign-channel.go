@@ -2,11 +2,13 @@ package campaign_model
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"sync"
 
 	synch_contract "github.com/Astervia/wacraft-core/src/synch/contract"
 	websocket_model "github.com/Astervia/wacraft-core/src/websocket/model"
+	"github.com/pterm/pterm"
 )
 
 type CampaignChannel struct {
@@ -17,10 +19,11 @@ type CampaignChannel struct {
 	cancelMu *sync.Mutex
 
 	// Distributed primitives (nil in memory-only mode).
-	cache      synch_contract.DistributedCache
-	pubsub     synch_contract.PubSub
-	cancelSub  synch_contract.Subscription
-	campaignID string
+	cache       synch_contract.DistributedCache
+	pubsub      synch_contract.PubSub
+	cancelSub   synch_contract.Subscription
+	progressSub synch_contract.Subscription
+	campaignID  string
 
 	websocket_model.Channel[websocket_model.ClientID, CampaignResults, string]
 }
@@ -120,6 +123,58 @@ func (c *CampaignChannel) UnsubscribeCancel() {
 	}
 }
 
+// BroadcastProgress sends campaign progress to all local WebSocket clients.
+// When a PubSub backend is configured the data is published to the distributed
+// channel so every instance can deliver it to its own local clients.
+func (c *CampaignChannel) BroadcastProgress(data CampaignResults) {
+	if c.pubsub != nil && c.campaignID != "" {
+		b, err := json.Marshal(data)
+		if err != nil {
+			pterm.DefaultLogger.Error("campaign broadcast progress marshal error: " + err.Error())
+			return
+		}
+		if err := c.pubsub.Publish("campaign:"+c.campaignID+":progress", b); err != nil {
+			pterm.DefaultLogger.Error("campaign broadcast progress publish error: " + err.Error())
+		}
+		return
+	}
+	// Memory-only mode: local broadcast.
+	c.BroadcastJsonMultithread(data)
+}
+
+// subscribeProgress subscribes to cross-instance progress events for this campaign.
+// Messages received are broadcast to all local WebSocket clients.
+func (c *CampaignChannel) subscribeProgress() {
+	if c.pubsub == nil || c.campaignID == "" {
+		return
+	}
+	sub, err := c.pubsub.Subscribe("campaign:" + c.campaignID + ":progress")
+	if err != nil {
+		pterm.DefaultLogger.Error("campaign subscribe progress error: " + err.Error())
+		return
+	}
+	c.progressSub = sub
+
+	go func() {
+		for msg := range sub.Channel() {
+			var data CampaignResults
+			if err := json.Unmarshal(msg, &data); err != nil {
+				pterm.DefaultLogger.Error("campaign progress unmarshal error: " + err.Error())
+				continue
+			}
+			c.BroadcastJsonMultithread(data)
+		}
+	}()
+}
+
+// UnsubscribeProgress stops listening for progress events. Call when all clients disconnect.
+func (c *CampaignChannel) UnsubscribeProgress() {
+	if c.progressSub != nil {
+		c.progressSub.Unsubscribe()
+		c.progressSub = nil
+	}
+}
+
 func CreateCampaignChannel(
 	cancel *context.CancelFunc,
 ) *CampaignChannel {
@@ -136,7 +191,7 @@ func CreateCampaignChannel(
 }
 
 // CreateCampaignChannelWithDistributed creates a CampaignChannel backed by
-// distributed cache (for Sending flag) and pub/sub (for Cancel).
+// distributed cache (for Sending flag) and pub/sub (for Cancel and Progress).
 func CreateCampaignChannelWithDistributed(
 	cancel *context.CancelFunc,
 	cache synch_contract.DistributedCache,
@@ -147,5 +202,6 @@ func CreateCampaignChannelWithDistributed(
 	ch.cache = cache
 	ch.pubsub = pubsub
 	ch.campaignID = campaignID
+	ch.subscribeProgress()
 	return ch
 }
