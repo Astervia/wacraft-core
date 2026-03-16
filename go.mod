@@ -1,6 +1,6 @@
 module github.com/Astervia/wacraft-core
 
-go 1.25.5
+go 1.26.1
 
 require (
 	github.com/Rfluid/whatsapp-cloud-api v0.2.0

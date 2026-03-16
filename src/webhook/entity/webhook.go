@@ -39,8 +39,8 @@ type Webhook struct {
 	SigningEnabled bool   `json:"signing_enabled,omitempty" gorm:"default:false"`
 
 	// Reliability
-	MaxRetries   *int `json:"max_retries,omitempty" gorm:"default:3"`
-	RetryDelayMs *int `json:"retry_delay_ms,omitempty" gorm:"default:1000"`
+	MaxRetries   *int  `json:"max_retries,omitempty" gorm:"default:3"`
+	RetryDelayMs *int  `json:"retry_delay_ms,omitempty" gorm:"default:1000"`
 	IsActive     *bool `json:"is_active,omitempty" gorm:"default:true"`
 
 	// Custom headers
