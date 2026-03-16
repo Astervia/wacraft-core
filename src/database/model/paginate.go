@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 // Provides pagination parameters.
 type Paginate struct {
 	Limit  int `json:"limit" default:"10" query:"limit"` // Number of items to return
-	Offset int `json:"offset"default:"0" query:"offset"` // The offset from where to start the items
+	Offset int `json:"offset" default:"0" query:"offset"` // The offset from where to start the items
 }
 
 func (p *Paginate) PaginateQuery(db **gorm.DB) error {
