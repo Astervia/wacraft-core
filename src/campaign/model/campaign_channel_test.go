@@ -2,6 +2,7 @@ package campaign_model
 
 import (
 	"context"
+	"encoding/json"
 	"sync"
 	"testing"
 	"time"
@@ -197,5 +198,77 @@ func TestCampaignChannel_ConcurrentSetSending(t *testing.T) {
 
 	if ch.IsSending() {
 		t.Fatal("expected IsSending=false after all goroutines finished")
+	}
+}
+
+// ─── BroadcastProgress ──────────────────────────────────────────────────────
+
+// TestCampaignChannel_LocalProgress verifies that BroadcastProgress publishes
+// to the PubSub backend when a distributed channel is configured.
+func TestCampaignChannel_LocalProgress(t *testing.T) {
+	cache := synch_service.NewMemoryCache()
+	pubsub := synch_service.NewMemoryPubSub()
+	campaignID := "campaign-progress-local"
+
+	ch := CreateCampaignChannelWithDistributed(nil, cache, pubsub, campaignID)
+
+	// Subscribe directly to capture the published progress event.
+	sub, err := pubsub.Subscribe("campaign:" + campaignID + ":progress")
+	if err != nil {
+		t.Fatalf("subscribe: %v", err)
+	}
+	defer sub.Unsubscribe()
+
+	want := CampaignResults{Total: 10, Sent: 3, Successes: 2, Errors: 1}
+	ch.BroadcastProgress(want)
+
+	select {
+	case raw := <-sub.Channel():
+		var got CampaignResults
+		if err := json.Unmarshal(raw, &got); err != nil {
+			t.Fatalf("unmarshal: %v", err)
+		}
+		if got.Total != want.Total || got.Sent != want.Sent ||
+			got.Successes != want.Successes || got.Errors != want.Errors {
+			t.Fatalf("got %+v, want %+v", got, want)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("timed out waiting for progress broadcast")
+	}
+}
+
+// TestCampaignChannel_CrossInstanceProgress verifies that a progress event
+// published by the executing instance is received on the shared PubSub backend,
+// simulating delivery to another instance's subscriber goroutine.
+func TestCampaignChannel_CrossInstanceProgress(t *testing.T) {
+	cache := synch_service.NewMemoryCache()
+	pubsub := synch_service.NewMemoryPubSub()
+	campaignID := "campaign-progress-cross"
+
+	// Instance A: running the campaign and broadcasting progress.
+	chA := CreateCampaignChannelWithDistributed(nil, cache, pubsub, campaignID)
+
+	// Subscribe directly to simulate instance B receiving the cross-instance event.
+	sub, err := pubsub.Subscribe("campaign:" + campaignID + ":progress")
+	if err != nil {
+		t.Fatalf("subscribe: %v", err)
+	}
+	defer sub.Unsubscribe()
+
+	want := CampaignResults{Total: 5, Sent: 5, Successes: 4, Errors: 1}
+	chA.BroadcastProgress(want)
+
+	select {
+	case raw := <-sub.Channel():
+		var got CampaignResults
+		if err := json.Unmarshal(raw, &got); err != nil {
+			t.Fatalf("unmarshal: %v", err)
+		}
+		if got.Total != want.Total || got.Sent != want.Sent ||
+			got.Successes != want.Successes || got.Errors != want.Errors {
+			t.Fatalf("got %+v, want %+v", got, want)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("timed out waiting for cross-instance progress")
 	}
 }

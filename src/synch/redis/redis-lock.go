@@ -35,6 +35,25 @@ func NewRedisLock[T comparable](client *Client) *RedisLock[T] {
 	}
 }
 
+func (l *RedisLock[T]) TryLock(key T) (bool, error) {
+	ctx := context.Background()
+	redisKey := l.client.PrefixKey(fmt.Sprintf("lock:%v", key))
+	value := fmt.Sprintf("%s:%s", l.ownerID, uuid.New().String())
+
+	ok, err := l.client.rdb.SetNX(ctx, redisKey, value, l.ttl).Result()
+	if err != nil {
+		return false, fmt.Errorf("redis try lock: %w", err)
+	}
+
+	if ok {
+		l.ownersMu.Lock()
+		l.owners[key] = value
+		l.ownersMu.Unlock()
+	}
+
+	return ok, nil
+}
+
 func (l *RedisLock[T]) Lock(key T) error {
 	ctx := context.Background()
 	redisKey := l.client.PrefixKey(fmt.Sprintf("lock:%v", key))
