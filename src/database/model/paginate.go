@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 // Provides pagination parameters.
 type Paginate struct {
-	Limit  int `json:"limit" default:"10" query:"limit"` // Number of items to return
+	Limit  int `json:"limit" default:"10" query:"limit"`  // Number of items to return
 	Offset int `json:"offset" default:"0" query:"offset"` // The offset from where to start the items
 }
 
