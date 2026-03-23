@@ -137,3 +137,66 @@ func TestMemoryCounter_IncrementAfterTTLExpiry(t *testing.T) {
 		t.Errorf("Increment after TTL = %d, want 3", result)
 	}
 }
+
+// TestMemoryCounter_ConcurrentIncrementAndSetTTL reproduces the cold-start data race
+// that caused spurious 429s on the first request. On first use, one goroutine does
+// the initial Increment (and then calls SetTTL), while concurrent goroutines also
+// call Increment on the same key. Without the per-entry mutex, hasTTL and expiresAt
+// could be partially written while another goroutine reads them, resetting the counter.
+func TestMemoryCounter_ConcurrentIncrementAndSetTTL(t *testing.T) {
+	const goroutines = 50
+	const ttl = 5 * time.Second
+
+	c := NewMemoryCounter()
+	var wg sync.WaitGroup
+	wg.Add(goroutines)
+
+	for i := range goroutines {
+		go func(i int) {
+			defer wg.Done()
+			val, _ := c.Increment("k", 1)
+			// Simulate what ThroughputCounter does: the goroutine that gets
+			// val==1 (first increment) sets the TTL, racing all others.
+			if val == 1 {
+				c.SetTTL("k", ttl)
+			}
+		}(i)
+	}
+
+	wg.Wait()
+
+	// All goroutines incremented by 1. Counter must be exactly goroutines.
+	// A race resetting the counter mid-flight would make this less.
+	val, _ := c.Get("k")
+	if val != goroutines {
+		t.Errorf("counter = %d after %d concurrent increments, want %d (counter was reset by a race)", val, goroutines, goroutines)
+	}
+}
+
+// TestMemoryCounter_ConcurrentSetTTLAndIncrement checks the reverse ordering:
+// SetTTL is called just before a burst of Increments begins (simulates a window
+// boundary where TTL is already set on entry creation and goroutines pile in).
+func TestMemoryCounter_ConcurrentSetTTLAndIncrement(t *testing.T) {
+	const goroutines = 50
+
+	c := NewMemoryCounter()
+	c.Increment("k", 1)
+	c.SetTTL("k", 5*time.Second)
+
+	var wg sync.WaitGroup
+	wg.Add(goroutines)
+
+	for range goroutines {
+		go func() {
+			defer wg.Done()
+			c.Increment("k", 1)
+		}()
+	}
+
+	wg.Wait()
+
+	val, _ := c.Get("k")
+	if val != goroutines+1 {
+		t.Errorf("counter = %d, want %d (one seed + %d concurrent)", val, goroutines+1, goroutines)
+	}
+}
