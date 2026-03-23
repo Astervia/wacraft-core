@@ -15,6 +15,6 @@ test-distributed:
 	@echo "Running tests..."
 	@REDIS_URL=redis://localhost:16379 go test ./... -v -race; \
 		EXIT=$$?; \
-		echo "Stopping Redis container..."; \
+		echo "Removing Redis container..."; \
 		docker rm -f wacraft-core-test-redis > /dev/null; \
 		exit $$EXIT
