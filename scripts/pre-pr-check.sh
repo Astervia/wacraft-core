@@ -4,8 +4,8 @@
 # CodeQL (GitHub-only) and SBOM (artifact-only) are intentionally skipped.
 #
 # Dependency graph (matches CI jobs):
-#   Wave 1 (parallel): gofmt | go_vet | go_test | gitleaks
-#   Wave 2:            govulncheck    <- needs gofmt + go_vet + go_test
+#   Wave 1 (parallel): gofmt | go_vet | go_test_memory | go_test_distributed | gitleaks
+#   Wave 2:            govulncheck    <- needs gofmt + go_vet + go_test_memory + go_test_distributed
 #   Wave 3:            go_build       <- needs govulncheck
 #   gitleaks runs freely and never blocks other waves.
 set -uo pipefail
@@ -31,7 +31,8 @@ has_tool() { command -v "$1" &>/dev/null; }
 declare -A HINTS
 HINTS[gofmt]="run: gofmt -w . to auto-fix all formatting"
 HINTS[go_vet]="fix the reported issues; run: go vet ./..."
-HINTS[go_test]="fix failing tests; run: make test-redis (or: go test ./... -v -run <TestName>)"
+HINTS[go_test_memory]="fix failing tests; run: make test (or: go test ./... -v -run <TestName>)"
+HINTS[go_test_distributed]="fix failing tests; run: make test-distributed (or: REDIS_URL=... go test ./... -v -run <TestName>)"
 HINTS[govulncheck]="upgrade the vulnerable module: go get -u <module>@<safe-version>"
 HINTS[gitleaks]="remove the secret from history; see: git-filter-repo or BFG"
 HINTS[go_build]="fix compilation errors above; run: go build ./... for details"
@@ -131,7 +132,7 @@ gate_ok() {
 # ─────────────────────────────────────────────────────────────────────────────
 # Wave 1 — all independent checks in parallel
 # ─────────────────────────────────────────────────────────────────────────────
-banner "Wave 1 — parallel: gofmt | go_vet | go_test | gitleaks"
+banner "Wave 1 — parallel: gofmt | go_vet | go_test_memory | go_test_distributed | gitleaks"
 
 launch gofmt bash -c '
     files="$(gofmt -l .)"
@@ -145,8 +146,10 @@ launch gofmt bash -c '
 
 launch go_vet go vet ./...
 
+launch go_test_memory go test ./... -v -race -count=1
+
 if has_tool docker; then
-    launch go_test bash -c '
+    launch go_test_distributed bash -c '
         REDIS_NAME="wacraft-core-pre-pr-redis-$$"
         cleanup() { docker rm -f "$REDIS_NAME" >/dev/null 2>&1 || true; }
         trap cleanup EXIT
@@ -158,12 +161,11 @@ if has_tool docker; then
         echo "Waiting for Redis (port $REDIS_PORT)..."
         until docker exec "$REDIS_NAME" redis-cli ping 2>/dev/null | grep -q PONG; do sleep 0.1; done
 
-        echo "Running tests..."
-        REDIS_URL="redis://localhost:$REDIS_PORT" go test ./... -v -race
+        echo "Running tests (distributed mode)..."
+        REDIS_URL="redis://localhost:$REDIS_PORT" go test ./... -v -race -count=1
     '
 else
-    echo -e "  ${YELLOW}docker not found — running tests without Redis (integration tests will be skipped)${RESET}"
-    launch go_test go test ./... -v
+    mark_skip go_test_distributed "docker not available"
 fi
 
 if has_tool gitleaks; then
@@ -176,13 +178,13 @@ fi
 # Gate: wait for lint checks before proceeding to govulncheck.
 # gitleaks section also appears here as it completes.
 # ─────────────────────────────────────────────────────────────────────────────
-banner "Gate — gofmt | go_vet | go_test"
-wait_for gofmt go_vet go_test
+banner "Gate — gofmt | go_vet | go_test_memory | go_test_distributed"
+wait_for gofmt go_vet go_test_memory go_test_distributed
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Wave 2 — govulncheck (needs lint gate)
 # ─────────────────────────────────────────────────────────────────────────────
-if gate_ok gofmt go_vet go_test; then
+if gate_ok gofmt go_vet go_test_memory go_test_distributed; then
     banner "Wave 2 — govulncheck"
     GOVULNCHECK="$(go env GOPATH)/bin/govulncheck"
     if [[ ! -x "$GOVULNCHECK" ]]; then
