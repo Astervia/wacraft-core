@@ -4,12 +4,12 @@ go 1.26.1
 
 require (
 	github.com/Rfluid/whatsapp-cloud-api v0.2.0
-	github.com/go-playground/validator/v10 v10.30.1
+	github.com/go-playground/validator/v10 v10.30.2
 	github.com/gofiber/contrib/websocket v1.3.4
 	github.com/google/uuid v1.6.0
 	github.com/pterm/pterm v0.12.83
 	github.com/redis/go-redis/v9 v9.18.0
-	golang.org/x/crypto v0.46.0
+	golang.org/x/crypto v0.49.0
 	gorm.io/gorm v1.31.1
 )
 
@@ -23,7 +23,7 @@ require (
 	github.com/containerd/console v1.0.5 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fasthttp/websocket v1.5.8 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.12 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/gofiber/fiber/v2 v2.52.6 // indirect
@@ -42,8 +42,8 @@ require (
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sys v0.41.0 // indirect
-	golang.org/x/term v0.40.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/net v0.51.0 // indirect
+	golang.org/x/sys v0.42.0 // indirect
+	golang.org/x/term v0.41.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
 )
