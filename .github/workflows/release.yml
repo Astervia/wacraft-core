@@ -1,0 +1,25 @@
+name: Release
+
+on:
+    push:
+        tags:
+            - "v0.*.*"
+
+jobs:
+    publish-release:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+            - name: Extract tag name
+              id: vars
+              run: |
+                  TAG="${GITHUB_REF#refs/tags/}"
+                  echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+            - name: Publish GitHub release
+              uses: softprops/action-gh-release@v2
+              with:
+                  tag_name: ${{ steps.vars.outputs.tag }}
+                  generate_release_notes: true
