@@ -10,8 +10,9 @@ type WorkspaceMember struct {
 	WorkspaceID uuid.UUID `json:"workspace_id" gorm:"type:uuid;not null;uniqueIndex:idx_workspace_member"`
 	UserID      uuid.UUID `json:"user_id" gorm:"type:uuid;not null;uniqueIndex:idx_workspace_member"`
 
-	Workspace *Workspace        `json:"workspace,omitempty" gorm:"foreignKey:WorkspaceID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	User      *user_entity.User `json:"user,omitempty" gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Workspace *Workspace              `json:"workspace,omitempty" gorm:"foreignKey:WorkspaceID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	User      *user_entity.User       `json:"user,omitempty" gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Policies  []WorkspaceMemberPolicy `json:"policies,omitempty" gorm:"foreignKey:WorkspaceMemberID"`
 
 	common_model.Audit
 }
