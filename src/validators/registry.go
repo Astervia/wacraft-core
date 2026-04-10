@@ -11,6 +11,7 @@ func RegisterAllValidators(v *validator.Validate) error {
 		RegisterSearchableCampaignColumnValidator,
 		RegisterSearchableUserColumnValidator,
 		RegisterSearchableWebhookColumnValidator,
+		RegisterSearchableStatusColumnValidator,
 		RegisterJsonMessageKeyValidator,
 	}
 
