@@ -1,6 +1,6 @@
 module github.com/Astervia/wacraft-core
 
-go 1.26.2
+go 1.26.4
 
 require (
 	github.com/Rfluid/whatsapp-cloud-api v0.2.0
@@ -9,7 +9,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/pterm/pterm v0.12.83
 	github.com/redis/go-redis/v9 v9.18.0
-	golang.org/x/crypto v0.49.0
+	golang.org/x/crypto v0.50.0
 	gorm.io/gorm v1.31.1
 )
 
@@ -42,8 +42,8 @@ require (
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/net v0.51.0 // indirect
-	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/term v0.41.0 // indirect
-	golang.org/x/text v0.35.0 // indirect
+	golang.org/x/net v0.53.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/term v0.42.0 // indirect
+	golang.org/x/text v0.36.0 // indirect
 )
