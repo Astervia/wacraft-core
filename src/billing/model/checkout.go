@@ -18,3 +18,11 @@ type CheckoutResponse struct {
 	CheckoutURL string `json:"checkout_url"`
 	ExternalID  string `json:"external_id"`
 }
+
+// ResumeCheckoutRequest carries the redirect URLs used when a pending
+// subscription's checkout must be resumed. If the original checkout session
+// expired, a fresh session is created using these URLs.
+type ResumeCheckoutRequest struct {
+	SuccessURL string `json:"success_url" validate:"required,url"`
+	CancelURL  string `json:"cancel_url" validate:"required,url"`
+}
