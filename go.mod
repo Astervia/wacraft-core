@@ -3,7 +3,7 @@ module github.com/Astervia/wacraft-core
 go 1.26.4
 
 require (
-	github.com/Rfluid/whatsapp-cloud-api v0.2.0
+	github.com/Rfluid/whatsapp-cloud-api v0.2.1
 	github.com/go-playground/validator/v10 v10.30.3
 	github.com/gofiber/contrib/websocket v1.3.4
 	github.com/google/uuid v1.6.0
